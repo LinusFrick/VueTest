@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <form @submit.prevent="login" >
+      <form @submit.prevent="register" >
         <div>
         <input class="form-input" placeholder="Username" v-model="username" required />
         <input class="form-input" placeholder="Email" v-model="email" required />
@@ -13,6 +13,26 @@
   
   <script>
   export default {
+    data(){
+        return {
+            username: '',
+            email: '',
+            password: '',
+        };
+    },
+    methods: {
+        async register() {
+            const success = await this.$store.dispatch('register', {
+                username: this.username,
+                email: this.email,
+                password: this.password,
+            });
+
+            if(success){
+                this.$router.push('home');
+            }
+        }
+    }
   };
   </script>
   

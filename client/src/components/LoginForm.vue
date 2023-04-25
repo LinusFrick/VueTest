@@ -6,7 +6,7 @@
         <input class="form-input" placeholder="Email" v-model="email" required />
         <input class="form-input" placeholder="Password" v-model="password" required />
         </div>
-        <button type="submit" >Sign In</button>
+        <button type="submit" >register</button>
       </form>
     </div>
   </template>
