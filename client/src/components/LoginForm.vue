@@ -2,31 +2,41 @@
     <div class="container">
       <form @submit.prevent="login" >
         <div>
-        <input class="form-input" placeholder="Username" v-model="username" required />
-        <input class="form-input" placeholder="Email" v-model="email" required />
-        <input class="form-input" placeholder="Password" v-model="password" required />
+        <input type="text" class="form-input" placeholder="Username" v-model="username" required />
+        <input type="password" class="form-input" placeholder="Password" v-model="password" required />
         </div>
-        <button type="submit" >register</button>
+        <button type="submit" >sign in</button>
       </form>
     </div>
   </template>
   
-  <script>
-  export default {
-    data(){
-        return {
-            username: '',
-            email: '',
-            password: '',
-        };
-    },
-    methods: {
-        async login() {
-            
+<script>
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+    };
+  },
+  methods: {
+    async login() {
+      const role = await this.$store.dispatch("login", {
+        username: this.username,
+        password: this.password,
+      });
+
+      if (role) {
+        if (role === "admin") {
+          this.$router.push({ name: "admin" });
+        } else if (role === "customer") {
+          this.$router.push({ name: "customer" });
         }
-    }
-  };
-  </script>
+      }
+    },
+  },
+};
+</script>
+
   
   <style>
   html,

@@ -2,18 +2,18 @@
     <div class="container">
       <form @submit.prevent="register" >
         <div>
-        <input class="form-input" placeholder="Username" v-model="username" required />
-        <input class="form-input" placeholder="Email" v-model="email" required />
-        <input class="form-input" placeholder="Password" v-model="password" required />
+        <input type="text" class="form-input" placeholder="Username" v-model="username" required />
+        <input type="text" class="form-input" placeholder="Email" v-model="email" required />
+        <input type="password" class="form-input" placeholder="Password" v-model="password" required />
         </div>
-        <button type="submit" >Sign In</button>
+        <button type="submit">Register</button>
       </form>
     </div>
   </template>
   
   <script>
   export default {
-    data(){
+    data(){ 
         return {
             username: '',
             email: '',
@@ -22,6 +22,7 @@
     },
     methods: {
         async register() {
+          console.log('reg')
             const success = await this.$store.dispatch('register', {
                 username: this.username,
                 email: this.email,
@@ -29,7 +30,7 @@
             });
 
             if(success){
-                this.$router.push('home');
+              this.$router.push({ name: 'home' });
             }
         }
     }
