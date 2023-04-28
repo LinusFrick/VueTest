@@ -19,23 +19,25 @@ const store = createStore({
     },
   },
   getters:{
-    loggedInUsername: (state) => {
-      return state.user ? state.user.username : null;
-    }
   },
   actions: {
-    async login({ commit }, { username, password }) {
+    async login({commit}, {username, password}) {
       try {
-        const response = await axios.post('http://localhost:8080/login', { username, password });
-    
+        const response = await axios.post('http://localhost:8080/login', {username, password});
+        console.log(username);
+
         console.log('Server response:', response);
-    
+
         if (response.data.loggedIn) {
           const user = {
             role: response.data.role,
+            _id: response.data._id,
+            username: response.data.username,
+
           };
-    
+
           commit('setUser', user);
+          console.log('this is',username)
           return user.role;
         } else {
           console.error('Login failed:', response.data.message);
@@ -45,6 +47,29 @@ const store = createStore({
         console.error('login failed', error);
         return null;
       }
+
+
+    },
+    async getUser({ commit }, userId) {
+      axios.get(`http://localhost:8080/login/${userId}`).then(response => {
+        console.log('user data', response.data)
+        if (response.data.loggedIn) {
+          const user = {
+            _id: response.data._id,
+            role: response.data.role,
+            username: response.data.username,
+          };
+
+          commit('setUser', user);
+          console.log('username:', username);
+          return user.role;
+        } else {
+          console.error('Login failed:', response.data.message);
+          return null;
+        }
+      }).catch(error => {
+        console.error('Error retrieving user information', error);
+      });
     },
     async register({ commit }, { username, email, password }) {
       try {
@@ -70,8 +95,7 @@ const store = createStore({
             reject();
           });
       });
-    },    
-  },
-});
+    },
+}});
 
 export default store;
