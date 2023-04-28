@@ -5,30 +5,40 @@ const mongoose = require('mongoose');
 const loginRouter = require('./routes/login-routes');
 const registerRouter = require('./routes/register-user');
 const cors = require('cors');
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+const store = new MongoDBStore({
+    uri: process.env.DB_CONNECTION,
+    collection: 'sessions'
+});
+
+store.on('error', function(error) {
+    console.log('Session store error:', error);
+});
 
 const app = express();
 
 app.use(express.json());
-app.use(cors());
 const corsOptions = {
     origin: 'http://localhost:5173',
     optionsSuccessStatus: 200,
+    credentials: true,
   };
   
   app.use(cors(corsOptions));
-  
+
 
 app.use(session({
-   secret: '.l,rtkdyfhgs.xdsdalkrdfgkcdhmsrfkx',
-   resave: false,
-   saveUninitialized: true,
-
-   cookie: { 
-      secure: false,
-      httpOnly: true,
-      maxAge: 365 * 24 * 60 * 60 * 1000
-   }  
-}))
+    secret: '.l,rtkdyfhgs.xdsdalkrdfgkcdhmsrfkx',
+    resave: false,
+    saveUninitialized: true,
+    store: store,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        maxAge: 365 * 24 * 60 * 60 * 1000
+    }
+}));
 
 mongoose.connect(
     process.env.DB_CONNECTION, {
