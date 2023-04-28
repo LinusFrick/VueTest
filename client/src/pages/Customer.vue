@@ -1,15 +1,11 @@
-<template>
-    <div>
-        <h1>Customer</h1>
-        <h3>Hello {{ username }}</h3>
-        <button type="submit" @click="performLogout">Log out</button>
-    </div>
-</template>
-
 <script>
 import { mapState, mapActions } from 'vuex';
+import Menu from "../components/Menu.vue";
 
 export default {
+    components: {
+      Menu
+    },
     mounted() {
         this.performGetUser();
 
@@ -43,3 +39,12 @@ export default {
     },
 };
 </script>
+
+<template>
+    <div>
+        <h1>Customer</h1>
+        <h3>Hello {{ username }}</h3>
+        <button type="submit" @click="performLogout">Log out</button>
+        <Menu />
+    </div>
+</template>

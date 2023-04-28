@@ -4,8 +4,10 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const loginRouter = require('./routes/login-routes');
 const registerRouter = require('./routes/register-user');
+const productRouter = require('./routes/menu-routes');
 const cors = require('cors');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const bodyParser = require('body-parser');
 
 const store = new MongoDBStore({
     uri: process.env.DB_CONNECTION,
@@ -26,6 +28,8 @@ const corsOptions = {
   };
   
   app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(session({
@@ -54,6 +58,7 @@ mongoose.connect(
 
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
+app.use('/menu', productRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

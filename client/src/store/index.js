@@ -4,12 +4,11 @@ import createPersitedState from 'vuex-persistedstate';
 
 const store = createStore({
   plugins: [createPersitedState()],
-  state() {
-    return {
+  state: {
       user: null,
       loggedIn: false,
       role: 'customer',
-    };
+      items: [],
   },
   mutations: {
     setUser(state, user) {
@@ -17,8 +16,17 @@ const store = createStore({
       state.loggedIn = !!user;
       state.role = user ? user.role : 'customer';
     },
+    setItems(state, items) {
+      state.items = items;
+    },
+    addItem(state, item) {
+      state.items.push(item);
+    }
   },
   getters:{
+    getItems(state){
+      return state.items;
+    }
   },
   actions: {
     async login({commit}, {username, password}) {
@@ -81,7 +89,23 @@ const store = createStore({
         return false;
       }
     },
-
+    async addItem({ commit }, { name, description, price, image }) {
+      try {
+        const response = await axios.post('http://localhost:8080/menu', { name, description, price, image: String(image) });
+        commit('addItem', response.data.item);
+      } catch (error) {
+        console.error('Error adding item', error);
+      }
+    },
+    async getItems({ commit }) {
+      try {
+        const response = await axios.get('http://localhost:8080/menu');
+        console.log('Fetched items:', response.data);
+        commit('setItems', response.data);
+      } catch (error) {
+        console.error('Error retrieving items', error);
+      }
+    },
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         axios

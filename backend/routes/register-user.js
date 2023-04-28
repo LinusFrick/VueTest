@@ -14,12 +14,11 @@ registerRouter.post('/', async (req, res) => {
     return;
   }
 
-  // Create a new user
   const newUser = new mongoose.models.users({
     username,
     email,
     password: getHash(password),
-    role: role || 'customer', // Use the role from the request or default to 'customer'
+    role: role || 'customer',
   });
 
   try {
