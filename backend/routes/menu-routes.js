@@ -29,15 +29,53 @@ productRouter.post('/', async(req, res) => {
     res.status(201).json(newProduct);
 });
 
-productRouter.get('/', async(req, res) => {
+productRouter.get('/', async (req, res) => {
     try {
-        const products = await mongoose.models.Product.find();
-        res.json(products);
+      const products = await mongoose.models.Product.find().exec();
+      res.json(products);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('internal error');
+    }
+  });
+
+  productRouter.put('/:id', async (req, res) => {
+    try{
+        const { id } = req.params;
+        const { name, description, price, image, type } = req.body;
+        const updatedProduct = await mongoose.models.Product.findByIdAndUpdate(id, {
+            name, description, price, image, type
+        });
+
+        if(!updatedProduct){
+            res.status(404).send('Product not found')
+        } else {
+            res.status(200).json(updatedProduct);
+        }
     }catch(error){
         console.error(error);
         res.status(500).send('internal error');
     }
-});
+  });
+
+  productRouter.delete('/:id', async (req, res) => {
+    try {
+      const ProductId = req.params.id;
+      const deletedProduct = await mongoose.models.Product.findByIdAndDelete(ProductId);
+  
+      if (!deletedProduct) {
+        res.status(404).send('Product not found');
+      } else {
+        res.status(200).json({ message: 'Product deleted', deletedProduct });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal server error');
+    }
+  });
+  
+  
+  
 
 module.exports = productRouter;
 

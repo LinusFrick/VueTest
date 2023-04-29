@@ -89,19 +89,22 @@ const store = createStore({
         return false;
       }
     },
-    async addItem({ commit }, { name, description, price, image }) {
+    async addItem({ commit }, itemData) {
       try {
-        const response = await axios.post('http://localhost:8080/menu', { name, description, price, image: String(image) });
-        commit('addItem', response.data.item);
+        const response = await axios.post('http://localhost:8080/menu', itemData);
+        commit('addItem', response.data);
+        return response.data;
       } catch (error) {
         console.error('Error adding item', error);
+        throw error;
       }
     },
     async getItems({ commit }) {
       try {
         const response = await axios.get('http://localhost:8080/menu');
         console.log('Fetched items:', response.data);
-        commit('setItems', response.data);
+        const items = response.data.filter(item => item !== null);
+        commit('setItems', items);
       } catch (error) {
         console.error('Error retrieving items', error);
       }
@@ -120,6 +123,17 @@ const store = createStore({
           });
       });
     },
+    async deleteProduct({ commit }, id) {
+      try {
+        console.log(`Deleting product with id ${id}`);
+        const response = await axios.delete('http://localhost:8080/menu/' +id);
+        const updatedItemsResponse = await axios.get('http://localhost:8080/menu');
+        const updatedItems = updatedItemsResponse.data.filter(item => item !== null);
+        commit('setItems', updatedItems);
+      } catch (error) {
+        console.error('Error while deleting product:', error);
+      }
+    }
 }});
 
 export default store;

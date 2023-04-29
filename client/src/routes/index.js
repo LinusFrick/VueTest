@@ -5,6 +5,7 @@ import LoginForm from '../components/LoginForm.vue';
 import RegisterForm from '../components/RegisterForm.vue';
 import Admin from '../pages/Admin.vue';
 import Customer from '../pages/Customer.vue';
+import AdminEdit from '../pages/AdminEdit.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -37,7 +38,12 @@ const router = createRouter({
                 }else {
                     next({ name: 'home' });
                 }
-            }
+            },
+            children: [{
+                path: 'AdminEdit',
+                name: 'AdminEdit',
+                component: AdminEdit
+            }]
             
         },
         {

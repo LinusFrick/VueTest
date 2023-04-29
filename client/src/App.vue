@@ -3,8 +3,10 @@
 
 <template>
 <div id="app">
+  <div id="app-wrapper">
   <router-view>
   </router-view>
+  </div>
 </div>
 </template>
 <style scoped>

@@ -1,6 +1,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import addProducts from "../components/addProducts.vue";
+import AdminEdit from './AdminEdit.vue';
 export default {
     components: {
         addProducts
@@ -22,6 +23,8 @@ export default {
 
 <template>
     <h1>Admin</h1>
-    <button type="submit" @click="performLogout" >Log out</button>
+    <button class sign type="submit" @click="performLogout" >Log out</button>
     <addProducts/>
+    <router-link :to="{name: 'AdminEdit'}">Menu</router-link>
+    <router-view></router-view>
 </template>

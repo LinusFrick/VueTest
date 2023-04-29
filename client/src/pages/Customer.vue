@@ -6,19 +6,19 @@ export default {
     components: {
       Menu
     },
-    mounted() {
-        this.performGetUser();
-
+    async mounted() {
+        await this.performGetUser();
+        await this.getItems();
 
     },
     computed: {
-        ...mapState(['user']),
+        ...mapState(['user', 'items']),
         username() {
             return this.user ? this.user.username : '';
         },
     },
     methods: {
-        ...mapActions(['logout', 'getUser']),
+        ...mapActions(['logout', 'getUser', 'getItems']),
         async performLogout() {
             try {
                 await this.logout();
@@ -44,7 +44,11 @@ export default {
     <div>
         <h1>Customer</h1>
         <h3>Hello {{ username }}</h3>
-        <button type="submit" @click="performLogout">Log out</button>
+        <button class="sign" type="submit" @click="performLogout">Log out</button>
         <Menu />
     </div>
 </template>
+
+<style>
+
+</style>

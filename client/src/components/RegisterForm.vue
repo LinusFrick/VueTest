@@ -37,17 +37,11 @@
   };
   </script>
   
-  <style>
+  <style scoped>
   html,
   body {
     margin: 0;
     height: 100%;
-  }
-  
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
   
   .container {
