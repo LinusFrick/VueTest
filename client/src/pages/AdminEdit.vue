@@ -5,9 +5,24 @@
             <img :src="product.image" alt="image of" />
             <p>{{ product.description }}</p>
             <h6>{{ product.price }}</h6>
-            <button>Edit</button>
+            <button @click="openEditForm(product)">Edit</button>
             <button @click="deleteProduct(product._id)">Delete</button>
         </li>
+        <div v-if="showEditForm">
+        <h3>Edit Product</h3>
+            <input type="hidden" v-model="editingProduct._id">
+            <input v-model="editingProduct.name" placeholder="Name" />
+            <input v-model="editingProduct.description" placeholder="Description" />
+            <input v-model="editingProduct.price" placeholder="Price" />
+            <input v-model="editingProduct.image" placeholder="Image URL" />
+            <select v-model="editingProduct.type">
+                <option value="pizza">Pizza</option>
+                <option value="drink">Drink</option>
+                <option value="aside">Aside</option>
+            </select>
+            <button @click="editProduct">Save</button> <!-- Call editProduct method -->
+            <button @click="showEditForm = false">Cancel</button>
+        </div>
 
     </ul>
 </template>
@@ -17,11 +32,31 @@ import {mapState, mapActions} from "vuex";
 
 export default {
     name: "AdminEdit",
+    data(){
+    return {
+        editingProduct: null,
+        showEditForm: false,
+    }
+    },
     computed: {
         ...mapState(['items']),
     },
     methods: {
-        ...mapActions(['deleteProduct']),
+        ...mapActions(['deleteProduct', 'updateProduct']),
+        async editProduct() {
+        console.log('editingProduct:', this.editingProduct);
+            if (this.editingProduct._id) {
+                await this.$store.dispatch('updateProduct', this.editingProduct);
+                this.showEditForm = false;
+            } else {
+            console.error('Product ID is undefined');
+                }
+        },
+        openEditForm(product) {
+            this.editingProduct = { ...product };
+            console.log('Product ID:', this.editingProduct._id);
+            this.showEditForm = true;
+        },
     },
     mounted() {
         this.$store.dispatch('getItems');

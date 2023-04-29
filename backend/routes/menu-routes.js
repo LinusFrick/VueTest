@@ -41,8 +41,10 @@ productRouter.get('/', async (req, res) => {
 
   productRouter.put('/:id', async (req, res) => {
     try{
-        const { id } = req.params;
+        const id = req.params.id;
         const { name, description, price, image, type } = req.body;
+        console.log('ID:', id);
+        console.log('request body:', req.body);
         const updatedProduct = await mongoose.models.Product.findByIdAndUpdate(id, {
             name, description, price, image, type
         });
@@ -58,7 +60,7 @@ productRouter.get('/', async (req, res) => {
     }
   });
 
-  productRouter.delete('/:id', async (req, res) => {
+  productRouter.delete(`/:id`, async (req, res) => {
     try {
       const ProductId = req.params.id;
       const deletedProduct = await mongoose.models.Product.findByIdAndDelete(ProductId);

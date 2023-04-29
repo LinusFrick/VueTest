@@ -133,7 +133,46 @@ const store = createStore({
       } catch (error) {
         console.error('Error while deleting product:', error);
       }
-    }
+    },
+    async updateProduct({ commit, dispatch }, productData) {
+      try {
+        console.log(productData);
+        const { _id, name, description, price, image, type } = productData;
+        const response = await axios.put('http://localhost:8080/menu/' +_id, {
+          name, description, price, image, type
+        });
+        console.log('passing ID:',_id);
+        console.log(productData);
+    
+        if (response.status === 200) {
+          const updatedProduct = response.data;
+          dispatch('getItems'); // Call the 'getItems' action using dispatch
+        } else {
+          console.error('error updating product', response.data);
+        }
+      } catch (error) {
+        console.error('error updating product', error);
+      }
+    },
+    // async updateProduct({ commit }, productData) {
+    //   try {
+    //     const { _id, name, description, price, image, type } = productData;
+    //     const response = await axios.put(`http://localhost:8080/menu/${_id}`, {
+    //       name, description, price, image, type
+    //     });
+    
+    //     if (response.status === 200) {
+    //       const updatedProduct = response.data;
+    //       const updatedItemsResponse = await axios.get('http://localhost:8080/menu');
+    //       const updatedItems = updatedItemsResponse.data.filter(item => item !== null);
+    //       commit('setItems', updatedItems);
+    //     } else {
+    //       console.error('Error updating product:', response.data);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error updating product:', error);
+    //   }
+    // }
 }});
 
 export default store;
