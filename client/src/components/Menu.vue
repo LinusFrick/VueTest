@@ -1,5 +1,5 @@
 <script>
-import {mapState} from "vuex";
+import {mapState, mapActions} from "vuex";
 
 export default {
     name: "Menu",
@@ -9,6 +9,20 @@ export default {
     mounted() {
         this.$store.dispatch('getItems');
     },
+    methods: {
+        ...mapActions(['addToCart']),
+        async handleAddToCart(product) {
+            try {
+                const productId = product._id;
+                const quantity = 1;
+                const itemData = { productId, quantity };
+                console.log('itemData:', itemData);
+                await this.addToCart(itemData);
+            }catch (error) {
+            console.error('error adding item', error);
+            }
+        }
+    }
 }
 </script>
 
@@ -19,6 +33,7 @@ export default {
             <img :src="product.image" alt="image of" />
             <p>{{ product.description }}</p>
             <h6>{{ product.price }}</h6>
+            <button @click="handleAddToCart(product)" >Add to cart</button>
         </li>
 
     </ul>

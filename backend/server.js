@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const loginRouter = require('./routes/login-routes');
 const registerRouter = require('./routes/register-user');
 const productRouter = require('./routes/menu-routes');
+const cartRouter = require('./routes/cart-routes');
 const cors = require('cors');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
@@ -59,6 +60,7 @@ mongoose.connect(
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/menu', productRouter);
+app.use('/cart', cartRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

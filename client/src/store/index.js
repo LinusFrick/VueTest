@@ -9,6 +9,7 @@ const store = createStore({
       loggedIn: false,
       role: 'customer',
       items: [],
+      cart: [],
   },
   mutations: {
     setUser(state, user) {
@@ -20,7 +21,10 @@ const store = createStore({
       state.items = items;
     },
     addItem(state, item) {
-      state.items.push(item);
+      state.cart.push(item);
+    },
+    addToCart(state, items) {
+      state.items.push(items);
     }
   },
   getters:{
@@ -109,6 +113,16 @@ const store = createStore({
         console.error('Error retrieving items', error);
       }
     },
+    async addToCart({ commit }, itemData) {
+      try {
+        const response = await axios.post('http://localhost:8080/cart', itemData);
+        commit('addToCart', response.data);
+        return response.data;
+      } catch (error) {
+        console.error('Error adding item', error);
+        throw error;
+      }
+    },
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         axios
@@ -146,7 +160,7 @@ const store = createStore({
     
         if (response.status === 200) {
           const updatedProduct = response.data;
-          dispatch('getItems'); // Call the 'getItems' action using dispatch
+          dispatch('getItems');
         } else {
           console.error('error updating product', response.data);
         }
@@ -154,25 +168,6 @@ const store = createStore({
         console.error('error updating product', error);
       }
     },
-    // async updateProduct({ commit }, productData) {
-    //   try {
-    //     const { _id, name, description, price, image, type } = productData;
-    //     const response = await axios.put(`http://localhost:8080/menu/${_id}`, {
-    //       name, description, price, image, type
-    //     });
-    
-    //     if (response.status === 200) {
-    //       const updatedProduct = response.data;
-    //       const updatedItemsResponse = await axios.get('http://localhost:8080/menu');
-    //       const updatedItems = updatedItemsResponse.data.filter(item => item !== null);
-    //       commit('setItems', updatedItems);
-    //     } else {
-    //       console.error('Error updating product:', response.data);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error updating product:', error);
-    //   }
-    // }
 }});
 
 export default store;
