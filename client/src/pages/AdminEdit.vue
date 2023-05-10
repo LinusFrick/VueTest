@@ -20,7 +20,7 @@
                 <option value="drink">Drink</option>
                 <option value="aside">Aside</option>
             </select>
-            <button @click="editProduct">Save</button> <!-- Call editProduct method -->
+            <button @click="editProduct">Save</button>
             <button @click="showEditForm = false">Cancel</button>
         </div>
 
@@ -57,6 +57,7 @@ export default {
             console.log('Product ID:', this.editingProduct._id);
             this.showEditForm = true;
         },
+        async addProducts(){}
     },
     mounted() {
         this.$store.dispatch('getItems');

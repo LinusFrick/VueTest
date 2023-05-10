@@ -4,27 +4,45 @@ import {mapState, mapActions} from "vuex";
 export default {
     name: "Menu",
     computed: {
-        ...mapState(['items']),
+        ...mapState(['items', 'cart']),
+        totalCost() {
+            return this.cart.reduce((total, product) => total + product.price * product.quantity, 0);
+        },
     },
     mounted() {
         this.$store.dispatch('getItems');
     },
     methods: {
-        ...mapActions(['addToCart']),
+        ...mapActions(['addToCart', 'removeFromCart']),
         async handleAddToCart(product) {
             try {
                 const productId = product._id;
                 const quantity = 1;
-                const itemData = { productId, quantity };
+                const price = product.price;
+                const name = product.name;
+                const itemData = { productId, quantity, price, name};
                 console.log('itemData:', itemData);
                 await this.addToCart(itemData);
+                console.log('Cart after adding:', this.cart); 
             }catch (error) {
-            console.error('error adding item', error);
+                console.error('error adding item', error);
+            }
+        },
+        async handleRemoveFromCart(product) {
+            try {
+            const productId = product.productId;
+            const itemData = { productId };
+            console.log('Removing item:', itemData);
+            await this.removeFromCart(itemData);
+            }catch (error) {
+            console.error('error removing item', error);
             }
         }
+
     }
 }
 </script>
+
 
 <template>
     <ul>
@@ -35,9 +53,19 @@ export default {
             <h6>{{ product.price }}</h6>
             <button @click="handleAddToCart(product)" >Add to cart</button>
         </li>
-
     </ul>
-  </template>
+    <h2>Cart</h2>
+    <ul>
+        <li v-for="(product, index) in cart" :key="index" >
+            <h3>{{ product.name }}</h3>
+            <p>Quantity: {{ product.quantity }}</p>
+            <h6>Price {{ product.price }}</h6>
+            <button @click="handleRemoveFromCart(product)" >Remove from cart</button>
+        </li>
+    </ul>
+    <h2>Total Cost: {{ totalCost }}</h2>
+</template>
+
   
 
 <style scoped>

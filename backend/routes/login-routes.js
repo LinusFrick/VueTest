@@ -25,6 +25,7 @@ const corsOptions = {
 };
 
 loginRouter.use(cors(corsOptions))
+
 loginRouter.post('/', async (req, res) => {
   try {
     const data = await mongoose.models.users.findOne({

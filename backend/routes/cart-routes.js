@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const express = require('express');
 const cartRouter = express.Router();
+const User = require('./login-routes');
 
 const CartItemSchema = new Schema({
     product : {
@@ -15,7 +16,7 @@ const CartSchema = new Schema({
     items: [CartItemSchema],
 });
 
-const Cart = mongoose.model('Cart', CartSchema);
+const CartItem = mongoose.model('Cart', CartSchema);
 
 
 cartRouter.post('/', async(req, res) => {
@@ -31,6 +32,7 @@ try{
 
 cartRouter.get('/:id', async (req, res) => {
     try{
+        const user = req.session
         const cart = await Cart.findById(req.params.id).populate('items.product');
 
         if(cart) {

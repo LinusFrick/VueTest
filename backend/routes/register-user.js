@@ -2,11 +2,13 @@ const express = require('express');
 const registerRouter = express.Router();
 const mongoose = require('mongoose');
 const getHash = require('../utils/hash');
+const Cart = require('./cart-routes');
 
 registerRouter.post('/', async (req, res) => {
   const { username, email, password, role } = req.body;
-
-  // Check if the user already exists
+  const newCart = new Cart({ items: [] });
+  newCart.save();
+  
   const userExists = await mongoose.models.users.findOne({ $or: [{ username }, { email }] });
 
   if (userExists) {
@@ -19,6 +21,7 @@ registerRouter.post('/', async (req, res) => {
     email,
     password: getHash(password),
     role: role || 'customer',
+    cart: newCart._id,
   });
 
   try {

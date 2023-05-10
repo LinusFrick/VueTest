@@ -20,16 +20,28 @@ const store = createStore({
     setItems(state, items) {
       state.items = items;
     },
+    addItem(state, items){
+      state.items = items;
+    },
     addItem(state, item) {
+      state.items.push(item);
+    },
+    addToCart(state, item) {
       state.cart.push(item);
     },
-    addToCart(state, items) {
-      state.items.push(items);
+    removeFromCart(state, item){
+      const index = state.cart.findIndex(cartItem => cartItem.productId === item.productId);
+      if(index !== -1) {
+        state.cart.splice(index, 1);
+      }
     }
   },
   getters:{
     getItems(state){
       return state.items;
+    },
+    getCart(state){
+      return state.cart;
     }
   },
   actions: {
@@ -59,8 +71,9 @@ const store = createStore({
         console.error('login failed', error);
         return null;
       }
-
-
+    },
+    async removeFromCart({ commit }, itemData){
+      commit('removeFromCart', itemData);
     },
     async getUser({ commit }, userId) {
       axios.get(`http://localhost:8080/login/${userId}`).then(response => {
@@ -96,7 +109,9 @@ const store = createStore({
     async addItem({ commit }, itemData) {
       try {
         const response = await axios.post('http://localhost:8080/menu', itemData);
+        const updatedItemsResponse = await axios.get('http://localhost:8080/menu');
         commit('addItem', response.data);
+        commit('setItems', updatedItemsResponse.data);
         return response.data;
       } catch (error) {
         console.error('Error adding item', error);
@@ -115,11 +130,9 @@ const store = createStore({
     },
     async addToCart({ commit }, itemData) {
       try {
-        const response = await axios.post('http://localhost:8080/cart', itemData);
-        commit('addToCart', response.data);
-        return response.data;
+        commit('addToCart', itemData);
       } catch (error) {
-        console.error('Error adding item', error);
+        console.error('Error adding item to cart', error);
         throw error;
       }
     },
