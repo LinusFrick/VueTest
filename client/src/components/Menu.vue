@@ -1,10 +1,11 @@
 <script>
 import {mapState, mapActions} from "vuex";
+import axios from 'axios';
 
 export default {
     name: "Menu",
     computed: {
-        ...mapState(['items', 'cart']),
+        ...mapState(['items', 'cart', 'user']),
         totalCost() {
             return this.cart.reduce((total, product) => total + product.price * product.quantity, 0);
         },
@@ -37,7 +38,20 @@ export default {
             }catch (error) {
             console.error('error removing item', error);
             }
-        }
+        },
+        async handleCheckout() {
+            try {
+                const order = {
+                    user: this.user,
+                    cart: this.cart,
+                    total: this.totalCost,
+                };
+                const response = await axios.post('http://localhost:8080/order', order);
+                console.log(response.data);
+            } catch (error) {
+                console.error('error placing order', error);
+            }
+        },
 
     }
 }
@@ -64,6 +78,7 @@ export default {
         </li>
     </ul>
     <h2>Total Cost: {{ totalCost }}</h2>
+    <button @click="handleCheckout(user)">Checkout</button>
 </template>
 
   
