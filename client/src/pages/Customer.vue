@@ -1,12 +1,10 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import Menu from "../components/Menu.vue";
-import Cart from '../components/Cart.vue';
 
 export default {
     components: {
       Menu,
-      Cart
     },
     async mounted() {
         await this.performGetUser();
@@ -47,7 +45,6 @@ export default {
         <h1>Customer</h1>
         <h3>Hello {{ username }}</h3>
         <button class="sign" type="submit" @click="performLogout">Log out</button>
-        <Cart />
         <Menu />
     </div>
 </template>
