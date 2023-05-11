@@ -48,15 +48,5 @@ export default {
         <router-link :to="{name: 'AdminOrders'}" ><button>Orders</button></router-link>
         <router-view></router-view>
     </div>
-    <!-- <div v-for="order in orders" :key="order._id">
-    <p>Order ID: {{ order._id }}</p>
-    <p>Items:</p>
-    <ul>
-      <li v-for="item in order.cart" :key="item.product._id">
-        <p>Product: {{ item.product.name }}</p>
-        <p>Quantity: {{ item.quantity }}</p>
-      </li>
-    </ul> -->
-  <!-- </div> -->
 </div>
 </template>
