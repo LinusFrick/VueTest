@@ -48,8 +48,8 @@ export default {
     <p>Order ID: {{ order._id }}</p>
     <p>Items:</p>
     <ul>
-      <li v-for="item in order.cart" :key="item._id">
-        <p>Product: {{ item.name }}</p>
+      <li v-for="item in order.cart" :key="item.product._id">
+        <p>Product: {{ item.product.name }}</p>
         <p>Quantity: {{ item.quantity }}</p>
       </li>
     </ul>

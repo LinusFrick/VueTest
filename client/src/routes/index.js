@@ -6,6 +6,7 @@ import RegisterForm from '../components/RegisterForm.vue';
 import Admin from '../pages/Admin.vue';
 import Customer from '../pages/Customer.vue';
 import AdminEdit from '../pages/AdminEdit.vue';
+import Checkout from '../pages/Checkout.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -59,7 +60,21 @@ const router = createRouter({
                 }else {
                     next({ name: 'home' });
                 }
-            }
+            },
+        },
+        {
+            path: '/customer/checkout',
+            name: 'checkout',
+            component: Checkout,
+            beforeEnter: (to, from, next) => {
+                const loggedIn = store.state.loggedIn;
+                const role = store.state.role;
+                if(loggedIn && role === 'customer'){
+                    next();
+                }else {
+                    next({ name: 'home' });
+                }
+            },
         },
     ]
 });

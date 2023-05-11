@@ -42,7 +42,7 @@ const store = createStore({
     },
     getCart(state){
       return state.cart;
-    }
+    },
   },
   actions: {
     async login({commit}, {username, password}) {
