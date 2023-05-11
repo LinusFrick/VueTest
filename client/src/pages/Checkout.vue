@@ -19,24 +19,30 @@ import axios from 'axios';
 export default {
     methods: {
         async handleCheckout() {
+    if (!this.user) {
+        console.error('User is not defined');
+        return;
+    }
 
-            if (!this.user) {
-            console.error('User is not defined');
-            return;
-            }
-            try {
-                const order = {
-                    user: this.user,
-                    cart: this.cart,
-                    total: this.totalCost,
-                };
-                console.log('user :', this.user)
-                const response = await axios.post('http://localhost:8080/order', order);
-                console.log(response.data);
-            } catch (error) {
-                console.error('error placing order', error);
-            }
-        },
+    try {
+        const payload = {
+            user: this.user,
+            cart: this.cart.map(item => ({
+                productId: item.productId,
+                name: item.name,
+                quantity: item.quantity
+            })),
+            total: this.totalCost
+            };
+
+        console.log('payload: ', payload);
+
+        const response = await axios.post('http://localhost:8080/order', payload);
+        console.log(response.data);
+    } catch (error) {
+        console.error('Error placing order', error);
+    }
+},
         async created() {
             await this.getUser();
             this.handleCheckout();

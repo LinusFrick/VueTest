@@ -39,12 +39,16 @@ export default {
 </script>
 
 <template>
+    <div>
     <h1>Admin</h1>
     <button class sign type="submit" @click="performLogout" >Log out</button>
     <addProducts/>
-    <router-link :to="{name: 'AdminEdit'}">Menu</router-link>
-    <router-view></router-view>
-    <div v-for="order in orders" :key="order._id">
+    <div>
+        <router-link :to="{name: 'AdminEdit'}"><button>Menu</button></router-link>
+        <router-link :to="{name: 'AdminOrders'}" ><button>Orders</button></router-link>
+        <router-view></router-view>
+    </div>
+    <!-- <div v-for="order in orders" :key="order._id">
     <p>Order ID: {{ order._id }}</p>
     <p>Items:</p>
     <ul>
@@ -52,6 +56,7 @@ export default {
         <p>Product: {{ item.product.name }}</p>
         <p>Quantity: {{ item.quantity }}</p>
       </li>
-    </ul>
-  </div>
+    </ul> -->
+  <!-- </div> -->
+</div>
 </template>

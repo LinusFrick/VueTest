@@ -4,20 +4,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-    user: { 
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    user: String,
     cart: [{
-        product: {
-            type: Schema.Types.ObjectId,
-            ref: 'Product'
-        },
-        quantity: {
-            type: Number,
-            required: true
-        }
-    }],
+          product: {
+            id: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Product' // the name of your product model
+            },
+            name: String // add a name field here
+          },
+          quantity: Number
+        }],
     orderdate: {
         type: Date,
         default: Date.now
@@ -27,29 +24,32 @@ const OrderSchema = new Schema({
 const Order = mongoose.model('Order', OrderSchema);
 
 
-orderRouter.post('/', async (req, res)  => {
-    const { cart, user, orderdate } = req.body;
-    if(!cart || !user){
-        return res.status(400).json({ message: 'cart and user required' })
-    }
-
-    try{
-        const order = new Order({
-            user: user._id,
-            cart: cart.map(item => ({
-                product: item.productId,
-                quantity: item.quantity,
-
-            })),
-            orderdate: Date.now(),
-        });
-        const savedOrder = await order.save();
-        return res.status(201).json({ message: 'order received', orderId: savedOrder._id });
-    }catch(error){
-        console.error('error placing order', error);
-        return res.status(500).json({ message: 'error during order placement' })
+orderRouter.post('/', async (req, res) => {
+    const { cart, user } = req.body;
+  
+    try {
+      const order = new Order({
+        user: user.username,
+        cart: cart.map(item => ({
+          product: {
+            id: item.productId,
+            name: item.name
+          },
+          quantity: item.quantity,
+        })),
+        orderdate: Date.now(),
+      });
+  
+      const savedOrder = await order.save();
+      return res.status(201).json({ message: 'Order received', orderId: savedOrder._id });
+    } catch (error) {
+      console.error('Error placing order', error);
+      return res.status(500).json({ message: 'Error during order placement' });
     }
 });
+
+  
+  
 
 // orderRouter.get('/', async (req, res) => {
 //     try {

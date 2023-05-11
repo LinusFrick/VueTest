@@ -6,6 +6,7 @@ import RegisterForm from '../components/RegisterForm.vue';
 import Admin from '../pages/Admin.vue';
 import Customer from '../pages/Customer.vue';
 import AdminEdit from '../pages/AdminEdit.vue';
+import AdminOrders from '../pages/AdminOrders.vue';
 import Checkout from '../pages/Checkout.vue';
 
 const router = createRouter({
@@ -46,6 +47,11 @@ const router = createRouter({
                 component: AdminEdit
             }]
             
+        },
+        {
+            path: '/Admin/Orders',
+            name: 'AdminOrders',
+            component: AdminOrders
         },
         {
             path: '/customer',

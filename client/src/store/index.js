@@ -87,7 +87,7 @@ const store = createStore({
 
           commit('setUser', user);
           console.log('username:', username);
-          return user.role;
+          return user;
         } else {
           console.error('Login failed:', response.data.message);
           return null;

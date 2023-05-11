@@ -20,7 +20,8 @@ export default {
                 const quantity = 1;
                 const price = product.price;
                 const name = product.name;
-                const itemData = { productId, quantity, price, name};
+                const user = this.user;
+                const itemData = { productId, quantity, price, name, user};
                 console.log('itemData:', itemData);
                 await this.addToCart(itemData);
                 console.log('Cart after adding:', this.cart); 
